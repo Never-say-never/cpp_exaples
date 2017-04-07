@@ -1,91 +1,13 @@
 #include <QCoreApplication>
-#include <QVector>
+#include <vector>
 
 #include <iostream>
+#include <stdio.h>
 
-/**
- * @brief The Base Interface
- */
-class Base
-{
-public:
-    size_t hash;
+#include <subbase.h>
+#include <staticinstance.h>
 
-    virtual void toString() = 0;
-    virtual size_t getHash() = 0;
-};
-
-/**
- * @brief The SubBase class
- */
-class SubBase : public Base
-{
-public:
-    SubBase()
-    {
-        hash = (size_t) this;
-    }
-
-    void toString()
-    {
-        std::cout << "SubBase {address: " << hash << "}" << std::endl;
-    }
-
-    size_t getHash()
-    {
-        return hash;
-    }
-};
-
-class NextBase : public SubBase
-{
-public:
-    NextBase()
-    {
-        hash = (size_t) this;
-    }
-
-    size_t getHash()
-    {
-        return hash;
-    }
-
-    void toString()
-    {
-        std::cout << "hui" << std::endl;
-    }
-};
-
-/**
- * @brief The Singleton class
- */
-class Manager : public Base
-{
-public:
-
-    static Manager& getInstance()
-    {
-        static Manager instance;
-        return instance;
-    }
-
-    void toString()
-    {
-        std::cout << "Manager {address: " << hash << "}" << std::endl;
-    }
-
-    size_t getHash()
-    {
-        return hash;
-    }
-
-private:
-    Manager()
-    {
-        hash = (size_t) this;
-    }
-};
-
+/*
 class Primal
 {
 public:
@@ -100,11 +22,6 @@ public:
 class Shit : public Primal
 {
 public:
-    /**
-     * @brief virtual in sub classes is not necessary, it using like a message
-     * for every one, that method was overridden, now in c++ 11
-     * we have override marker
-     */
     virtual void doSomeThing() override
     {
         std::cout << "Shit do" << std::endl;
@@ -114,7 +31,6 @@ public:
 class MyShit : public Shit
 {
 public:
-
     int* myArray;
 
     void doSomeThing() override
@@ -134,26 +50,56 @@ public:
         delete [] myArray;
     }
 };
+*/
+class ProtectedClass
+{
+protected:
+    void callMe()
+    {
+        std::cout << "call me bitch" << std::endl;
+    }
+};
 
+#define PROTECTED_CALL(className, method) class ICallYou : public ProtectedClass \
+{ \
+public:\
+    void call()\
+     {\
+        this->method();\
+    }\
+};\
+className c;\
+c.call();\
 
 int main(int argc, char *argv[])
 {
-    Manager::getInstance().toString();
+    QCoreApplication a(argc, argv);
+    //PROTECTED_CALL(ICallYou, callMe);
+
+    SubBase *obj = new SubBase;
+    obj->runMyJob();
+    obj->toString();
+    std::cout << "hash: " << obj->getHash() << std::endl;
+
+    StaticInstance::getObject().valCall();
+    obj->valCall();
+
+    delete obj;
 
     // cretae on stack
     // but https://en.wikipedia.org/wiki/Dangling_pointer
     // c++14 smart pointers as solution
-    Primal obj;
+    /*Primal obj;
     Primal *p = &obj;
 
     // cretae on heap
     Primal *l = new Shit;
     Primal *m = new MyShit;
 
-    QVector<Primal*> vector;
-    vector.append(p);
-    vector.append(l);
-    vector.append(m);
+    std::vector<Primal*> vector;
+    vector.push_back(p);
+    vector.push_back(l);
+    vector.push_back(m);
 
     for(int ix = 0; ix < vector.size(); ++ix)
     {
@@ -161,9 +107,12 @@ int main(int argc, char *argv[])
     }
 
     delete l;
-    delete m;
+    delete m;*/
 
-    QCoreApplication a(argc, argv);
+    /*float t = 0.1 + 0.2;
+    printf("%.17f\n", t);*/
+
+
     return a.exec();
 }
 
