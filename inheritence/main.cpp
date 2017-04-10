@@ -6,57 +6,14 @@
 
 #include <subbase.h>
 #include <staticinstance.h>
+#include "pattern/observer/observermanager.h"
 
-/*
-class Primal
-{
-public:
-    virtual void doSomeThing()
-    {
-        std::cout << "Primal do" << std::endl;
-    }
-
-    virtual ~Primal(){}
-};
-
-class Shit : public Primal
-{
-public:
-    virtual void doSomeThing() override
-    {
-        std::cout << "Shit do" << std::endl;
-    }
-};
-
-class MyShit : public Shit
-{
-public:
-    int* myArray;
-
-    void doSomeThing() override
-    {
-        std::cout << "MyShit do" << std::endl;
-    }
-
-    MyShit()
-    {
-        //memory heavy object
-        myArray = new int[1000];
-    }
-
-    ~MyShit()
-    {
-        // must be free
-        delete [] myArray;
-    }
-};
-*/
 class ProtectedClass
 {
 protected:
     void callMe()
     {
-        std::cout << "call me bitch" << std::endl;
+        std::cout << "Call me bro, protected" << std::endl;
     }
 };
 
@@ -71,12 +28,33 @@ public:\
 className c;\
 c.call();\
 
+/**
+ * @brief runObservtest
+ */
+void runObservtest()
+{
+    ObserverManager::startObserving();
+}
+
+/**
+ * @brief runFloattest
+ */
+void runFloattest()
+{
+    float t = 0.1 + 0.2;
+    printf("%.17f\n", t);
+}
+
+void runProtectedCall()
+{
+    PROTECTED_CALL(ICallYou, callMe);
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    //PROTECTED_CALL(ICallYou, callMe);
 
-    SubBase *obj = new SubBase;
+    /*SubBase *obj = new SubBase;
     obj->runMyJob();
     obj->toString();
     std::cout << "hash: " << obj->getHash() << std::endl;
@@ -84,7 +62,7 @@ int main(int argc, char *argv[])
     StaticInstance::getObject().valCall();
     obj->valCall();
 
-    delete obj;
+    delete obj;*/
 
     // cretae on stack
     // but https://en.wikipedia.org/wiki/Dangling_pointer
@@ -109,9 +87,10 @@ int main(int argc, char *argv[])
     delete l;
     delete m;*/
 
-    /*float t = 0.1 + 0.2;
-    printf("%.17f\n", t);*/
+    //runFloattest();
+    runProtectedCall();
 
+    runObservtest();
 
     return a.exec();
 }

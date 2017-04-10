@@ -49,9 +49,13 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		subbase.cpp 
+		subbase.cpp \
+		pattern/observer/observermanager.cpp \
+		pattern/observer/observable.cpp 
 OBJECTS       = main.o \
-		subbase.o
+		subbase.o \
+		observermanager.o \
+		observable.o
 DIST          = ../../Qt/5.5/gcc/mkspecs/features/spec_pre.prf \
 		../../Qt/5.5/gcc/mkspecs/common/unix.conf \
 		../../Qt/5.5/gcc/mkspecs/common/linux.conf \
@@ -190,8 +194,16 @@ DIST          = ../../Qt/5.5/gcc/mkspecs/features/spec_pre.prf \
 		singltonemanager.h \
 		staticinstance.h \
 		absbase.h \
-		subbase.h main.cpp \
-		subbase.cpp
+		subbase.h \
+		rwo.h \
+		observer.h \
+		pattern/observer/observer.h \
+		pattern/observer/observable.h \
+		pattern/observer/observerman.h \
+		pattern/observer/observermanager.h main.cpp \
+		subbase.cpp \
+		pattern/observer/observermanager.cpp \
+		pattern/observer/observable.cpp
 QMAKE_TARGET  = inheritence
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = inheritence
@@ -509,8 +521,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents base.h singltonemanager.h staticinstance.h absbase.h subbase.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp subbase.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents base.h singltonemanager.h staticinstance.h absbase.h subbase.h rwo.h observer.h pattern/observer/observer.h pattern/observer/observable.h pattern/observer/observerman.h pattern/observer/observermanager.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp subbase.cpp pattern/observer/observermanager.cpp pattern/observer/observable.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -604,13 +616,121 @@ main.o: main.cpp ../../Qt/5.5/gcc/include/QtCore/QCoreApplication \
 		../../Qt/5.5/gcc/include/QtCore/qeventloop.h \
 		subbase.h \
 		absbase.h \
-		base.h
+		base.h \
+		staticinstance.h \
+		pattern/observer/observermanager.h \
+		pattern/observer/observable.h \
+		../../Qt/5.5/gcc/include/QtCore/QVector \
+		../../Qt/5.5/gcc/include/QtCore/qvector.h \
+		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
+		pattern/observer/observer.h \
+		pattern/observer/observerman.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 subbase.o: subbase.cpp subbase.h \
 		absbase.h \
 		base.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o subbase.o subbase.cpp
+
+observermanager.o: pattern/observer/observermanager.cpp pattern/observer/observermanager.h \
+		pattern/observer/observable.h \
+		../../Qt/5.5/gcc/include/QtCore/QVector \
+		../../Qt/5.5/gcc/include/QtCore/qvector.h \
+		../../Qt/5.5/gcc/include/QtCore/qalgorithms.h \
+		../../Qt/5.5/gcc/include/QtCore/qglobal.h \
+		../../Qt/5.5/gcc/include/QtCore/qconfig.h \
+		../../Qt/5.5/gcc/include/QtCore/qfeatures.h \
+		../../Qt/5.5/gcc/include/QtCore/qsystemdetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qprocessordetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qtypeinfo.h \
+		../../Qt/5.5/gcc/include/QtCore/qtypetraits.h \
+		../../Qt/5.5/gcc/include/QtCore/qsysinfo.h \
+		../../Qt/5.5/gcc/include/QtCore/qlogging.h \
+		../../Qt/5.5/gcc/include/QtCore/qflags.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qbasicatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.5/gcc/include/QtCore/qgenericatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_gcc.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv7.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv6.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv5.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_ia64.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_mips.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_x86.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_unix.h \
+		../../Qt/5.5/gcc/include/QtCore/qglobalstatic.h \
+		../../Qt/5.5/gcc/include/QtCore/qmutex.h \
+		../../Qt/5.5/gcc/include/QtCore/qnumeric.h \
+		../../Qt/5.5/gcc/include/QtCore/qiterator.h \
+		../../Qt/5.5/gcc/include/QtCore/qlist.h \
+		../../Qt/5.5/gcc/include/QtCore/qrefcount.h \
+		../../Qt/5.5/gcc/include/QtCore/qarraydata.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearraylist.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearray.h \
+		../../Qt/5.5/gcc/include/QtCore/qnamespace.h \
+		../../Qt/5.5/gcc/include/QtCore/qstring.h \
+		../../Qt/5.5/gcc/include/QtCore/qchar.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringbuilder.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringlist.h \
+		../../Qt/5.5/gcc/include/QtCore/qregexp.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringmatcher.h \
+		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
+		pattern/observer/observer.h \
+		pattern/observer/observerman.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o observermanager.o pattern/observer/observermanager.cpp
+
+observable.o: pattern/observer/observable.cpp pattern/observer/observable.h \
+		../../Qt/5.5/gcc/include/QtCore/QVector \
+		../../Qt/5.5/gcc/include/QtCore/qvector.h \
+		../../Qt/5.5/gcc/include/QtCore/qalgorithms.h \
+		../../Qt/5.5/gcc/include/QtCore/qglobal.h \
+		../../Qt/5.5/gcc/include/QtCore/qconfig.h \
+		../../Qt/5.5/gcc/include/QtCore/qfeatures.h \
+		../../Qt/5.5/gcc/include/QtCore/qsystemdetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qprocessordetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qcompilerdetection.h \
+		../../Qt/5.5/gcc/include/QtCore/qtypeinfo.h \
+		../../Qt/5.5/gcc/include/QtCore/qtypetraits.h \
+		../../Qt/5.5/gcc/include/QtCore/qsysinfo.h \
+		../../Qt/5.5/gcc/include/QtCore/qlogging.h \
+		../../Qt/5.5/gcc/include/QtCore/qflags.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qbasicatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_bootstrap.h \
+		../../Qt/5.5/gcc/include/QtCore/qgenericatomic.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_cxx11.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_gcc.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_msvc.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv7.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv6.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_armv5.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_ia64.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_mips.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_x86.h \
+		../../Qt/5.5/gcc/include/QtCore/qatomic_unix.h \
+		../../Qt/5.5/gcc/include/QtCore/qglobalstatic.h \
+		../../Qt/5.5/gcc/include/QtCore/qmutex.h \
+		../../Qt/5.5/gcc/include/QtCore/qnumeric.h \
+		../../Qt/5.5/gcc/include/QtCore/qiterator.h \
+		../../Qt/5.5/gcc/include/QtCore/qlist.h \
+		../../Qt/5.5/gcc/include/QtCore/qrefcount.h \
+		../../Qt/5.5/gcc/include/QtCore/qarraydata.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearraylist.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearray.h \
+		../../Qt/5.5/gcc/include/QtCore/qnamespace.h \
+		../../Qt/5.5/gcc/include/QtCore/qstring.h \
+		../../Qt/5.5/gcc/include/QtCore/qchar.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringbuilder.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringlist.h \
+		../../Qt/5.5/gcc/include/QtCore/qregexp.h \
+		../../Qt/5.5/gcc/include/QtCore/qstringmatcher.h \
+		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
+		pattern/observer/observer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o observable.o pattern/observer/observable.cpp
 
 ####### Install
 
