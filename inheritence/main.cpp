@@ -3,10 +3,13 @@
 
 #include <iostream>
 #include <stdio.h>
-
+using namespace std;
 #include <subbase.h>
 #include <staticinstance.h>
 #include "pattern/observer/observermanager.h"
+#include "pattern/factory/demo_manager.h"
+
+
 
 class ProtectedClass
 {
@@ -45,16 +48,12 @@ void runFloattest()
     printf("%.17f\n", t);
 }
 
-void runProtectedCall()
+/**
+ * @brief rvalLvalOverloading
+ */
+void rvalLvalOverloading()
 {
-    PROTECTED_CALL(ICallYou, callMe);
-}
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication a(argc, argv);
-
-    /*SubBase *obj = new SubBase;
+    SubBase *obj = new SubBase;
     obj->runMyJob();
     obj->toString();
     std::cout << "hash: " << obj->getHash() << std::endl;
@@ -62,35 +61,61 @@ int main(int argc, char *argv[])
     StaticInstance::getObject().valCall();
     obj->valCall();
 
-    delete obj;*/
+    delete obj;
+}
 
+/**
+ * @brief listWithAbstractObjects
+ */
+void listWithAbstractObjects()
+{
     // cretae on stack
     // but https://en.wikipedia.org/wiki/Dangling_pointer
     // c++14 smart pointers as solution
-    /*Primal obj;
-    Primal *p = &obj;
+    SubBase obj;
+    Base *p = &obj;
 
     // cretae on heap
-    Primal *l = new Shit;
-    Primal *m = new MyShit;
+    Base *l = new SubBase;
+    Base *m = new SubBase;
 
-    std::vector<Primal*> vector;
+    std::vector<Base*> vector;
     vector.push_back(p);
     vector.push_back(l);
     vector.push_back(m);
 
     for(int ix = 0; ix < vector.size(); ++ix)
     {
-        vector.at(ix)->doSomeThing();
+        vector.at(ix)->valCall();
     }
 
     delete l;
-    delete m;*/
+    delete m;
+}
 
+/**
+ * @brief runProtectedCall
+ */
+void runProtectedCall()
+{
+    PROTECTED_CALL(ICallYou, callMe);
+}
+
+void space_ship_demo()
+{
+    FactoryManager f;
+    f.runDemo();
+}
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv); 
+    //listWithAbstractObjects();
     //runFloattest();
-    runProtectedCall();
+    //runProtectedCall();
+    //runObservtest();
 
-    runObservtest();
+    space_ship_demo();
 
     return a.exec();
 }

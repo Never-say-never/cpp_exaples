@@ -5,8 +5,6 @@
 #include "observer.h"
 #include "observable.h"
 
-using namespace std;
-
 /**
  * @brief The ObserverMan class - Клас спостережуваного об'єкта
  */
@@ -17,10 +15,10 @@ public:
     /**
      * @brief ObserverMan
      */
-    ObserverMan(string name)
+    ObserverMan(std::string name)
     {
-        Observable::getInstance()->registerObserver(this);
         this->name = name;
+        Observable::getInstance()->registerObserver(this);
     }
 
     /**
@@ -29,12 +27,21 @@ public:
      */
     void notify(const Observable &observable) override
     {
-        std::cout << "[" + name + "]" << " Data changed - "
+        std::cout << "notify " << "[" + name + "]" << " that Data changed - "
                   << observable.getData() << std::endl;
     }
 
+
+
 private:
     std::string name;
+
+    // Observer interface
+public:
+    std::string getName() override
+    {
+        return name;
+    }
 };
 
 #endif // OBSERVERMAN

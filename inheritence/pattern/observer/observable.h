@@ -35,6 +35,8 @@ public:
     void dataCahnge(int data)
     {
         this->data = data;
+        std::cout << "DATA WAS CHANGED: " << this->data << std::endl;
+
         this->notifyObservers();
     }
 
@@ -52,7 +54,7 @@ public:
 
         this->observerList.append(obs);
 
-        std::cout << "list size : " << this->observerList.size() << std::endl;
+        std::cout << "add to listeners" << "[" << this->observerList.size() << "] - " << obs->getName() << std::endl;
     }
 
     /**

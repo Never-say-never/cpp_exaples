@@ -57,7 +57,7 @@ std::string SubBase::gerDataReversCopy()
  * @param str
  * @return
  */
-void SubBase::reversString(string &str)
+void SubBase::reversString(std::string &str)
 {
     if(str.empty())
     {

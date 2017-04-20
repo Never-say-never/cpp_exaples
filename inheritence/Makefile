@@ -51,11 +51,15 @@ OBJECTS_DIR   = ./
 SOURCES       = main.cpp \
 		subbase.cpp \
 		pattern/observer/observermanager.cpp \
-		pattern/observer/observable.cpp 
+		pattern/observer/observable.cpp \
+		pattern/factory/factory.cpp \
+		pattern/factory/factorymanager.cpp 
 OBJECTS       = main.o \
 		subbase.o \
 		observermanager.o \
-		observable.o
+		observable.o \
+		factory.o \
+		factorymanager.o
 DIST          = ../../Qt/5.5/gcc/mkspecs/features/spec_pre.prf \
 		../../Qt/5.5/gcc/mkspecs/common/unix.conf \
 		../../Qt/5.5/gcc/mkspecs/common/linux.conf \
@@ -200,10 +204,27 @@ DIST          = ../../Qt/5.5/gcc/mkspecs/features/spec_pre.prf \
 		pattern/observer/observer.h \
 		pattern/observer/observable.h \
 		pattern/observer/observerman.h \
-		pattern/observer/observermanager.h main.cpp \
+		pattern/observer/observermanager.h \
+		pattern/factory/factory.h \
+		pattern/factory/data_structures.h \
+		pattern/factory/builder.h \
+		pattern/factory/factory_shell.h \
+		pattern/factory/factory_engine.h \
+		pattern/factory/demo_manager.h \
+		pattern/factory/spaceship.h \
+		pattern/factory/ispaceship.h \
+		space_objects/ships/ship_shell.h \
+		space_objects/ships/ship_enging.h \
+		pattern/factory/builder_battleship.h \
+		pattern/factory/builder_transport.h \
+		space_objects/ships/ishipenging.h \
+		space_objects/ships/ishipshell.h \
+		space_objects/ships/iunit.h main.cpp \
 		subbase.cpp \
 		pattern/observer/observermanager.cpp \
-		pattern/observer/observable.cpp
+		pattern/observer/observable.cpp \
+		pattern/factory/factory.cpp \
+		pattern/factory/factorymanager.cpp
 QMAKE_TARGET  = inheritence
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = inheritence
@@ -521,8 +542,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents base.h singltonemanager.h staticinstance.h absbase.h subbase.h rwo.h observer.h pattern/observer/observer.h pattern/observer/observable.h pattern/observer/observerman.h pattern/observer/observermanager.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp subbase.cpp pattern/observer/observermanager.cpp pattern/observer/observable.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents base.h singltonemanager.h staticinstance.h absbase.h subbase.h rwo.h observer.h pattern/observer/observer.h pattern/observer/observable.h pattern/observer/observerman.h pattern/observer/observermanager.h pattern/factory/factory.h pattern/factory/data_structures.h pattern/factory/builder.h pattern/factory/factory_shell.h pattern/factory/factory_engine.h pattern/factory/demo_manager.h pattern/factory/spaceship.h pattern/factory/ispaceship.h space_objects/ships/ship_shell.h space_objects/ships/ship_enging.h pattern/factory/builder_battleship.h pattern/factory/builder_transport.h space_objects/ships/ishipenging.h space_objects/ships/ishipshell.h space_objects/ships/iunit.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp subbase.cpp pattern/observer/observermanager.cpp pattern/observer/observable.cpp pattern/factory/factory.cpp pattern/factory/factorymanager.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -619,12 +640,24 @@ main.o: main.cpp ../../Qt/5.5/gcc/include/QtCore/QCoreApplication \
 		base.h \
 		staticinstance.h \
 		pattern/observer/observermanager.h \
+		../../Qt/5.5/gcc/include/QtCore/QThread \
+		../../Qt/5.5/gcc/include/QtCore/qthread.h \
+		../../Qt/5.5/gcc/include/QtCore/QMutex \
 		pattern/observer/observable.h \
 		../../Qt/5.5/gcc/include/QtCore/QVector \
 		../../Qt/5.5/gcc/include/QtCore/qvector.h \
 		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
 		pattern/observer/observer.h \
-		pattern/observer/observerman.h
+		pattern/observer/observerman.h \
+		pattern/factory/demo_manager.h \
+		pattern/factory/spaceship.h \
+		space_objects/ships/ship_shell.h \
+		space_objects/ships/ishipshell.h \
+		space_objects/ships/iunit.h \
+		space_objects/ships/ship_enging.h \
+		space_objects/ships/ishipenging.h \
+		pattern/factory/data_structures.h \
+		pattern/factory/ispaceship.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 subbase.o: subbase.cpp subbase.h \
@@ -633,10 +666,11 @@ subbase.o: subbase.cpp subbase.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o subbase.o subbase.cpp
 
 observermanager.o: pattern/observer/observermanager.cpp pattern/observer/observermanager.h \
-		pattern/observer/observable.h \
-		../../Qt/5.5/gcc/include/QtCore/QVector \
-		../../Qt/5.5/gcc/include/QtCore/qvector.h \
-		../../Qt/5.5/gcc/include/QtCore/qalgorithms.h \
+		../../Qt/5.5/gcc/include/QtCore/QThread \
+		../../Qt/5.5/gcc/include/QtCore/qthread.h \
+		../../Qt/5.5/gcc/include/QtCore/qobject.h \
+		../../Qt/5.5/gcc/include/QtCore/qobjectdefs.h \
+		../../Qt/5.5/gcc/include/QtCore/qnamespace.h \
 		../../Qt/5.5/gcc/include/QtCore/qglobal.h \
 		../../Qt/5.5/gcc/include/QtCore/qconfig.h \
 		../../Qt/5.5/gcc/include/QtCore/qfeatures.h \
@@ -665,19 +699,31 @@ observermanager.o: pattern/observer/observermanager.cpp pattern/observer/observe
 		../../Qt/5.5/gcc/include/QtCore/qglobalstatic.h \
 		../../Qt/5.5/gcc/include/QtCore/qmutex.h \
 		../../Qt/5.5/gcc/include/QtCore/qnumeric.h \
-		../../Qt/5.5/gcc/include/QtCore/qiterator.h \
-		../../Qt/5.5/gcc/include/QtCore/qlist.h \
-		../../Qt/5.5/gcc/include/QtCore/qrefcount.h \
-		../../Qt/5.5/gcc/include/QtCore/qarraydata.h \
-		../../Qt/5.5/gcc/include/QtCore/qbytearraylist.h \
-		../../Qt/5.5/gcc/include/QtCore/qbytearray.h \
-		../../Qt/5.5/gcc/include/QtCore/qnamespace.h \
+		../../Qt/5.5/gcc/include/QtCore/qobjectdefs_impl.h \
 		../../Qt/5.5/gcc/include/QtCore/qstring.h \
 		../../Qt/5.5/gcc/include/QtCore/qchar.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearray.h \
+		../../Qt/5.5/gcc/include/QtCore/qrefcount.h \
+		../../Qt/5.5/gcc/include/QtCore/qarraydata.h \
 		../../Qt/5.5/gcc/include/QtCore/qstringbuilder.h \
+		../../Qt/5.5/gcc/include/QtCore/qlist.h \
+		../../Qt/5.5/gcc/include/QtCore/qalgorithms.h \
+		../../Qt/5.5/gcc/include/QtCore/qiterator.h \
+		../../Qt/5.5/gcc/include/QtCore/qbytearraylist.h \
 		../../Qt/5.5/gcc/include/QtCore/qstringlist.h \
 		../../Qt/5.5/gcc/include/QtCore/qregexp.h \
 		../../Qt/5.5/gcc/include/QtCore/qstringmatcher.h \
+		../../Qt/5.5/gcc/include/QtCore/qcoreevent.h \
+		../../Qt/5.5/gcc/include/QtCore/qscopedpointer.h \
+		../../Qt/5.5/gcc/include/QtCore/qmetatype.h \
+		../../Qt/5.5/gcc/include/QtCore/qvarlengtharray.h \
+		../../Qt/5.5/gcc/include/QtCore/qcontainerfwd.h \
+		../../Qt/5.5/gcc/include/QtCore/qisenum.h \
+		../../Qt/5.5/gcc/include/QtCore/qobject_impl.h \
+		../../Qt/5.5/gcc/include/QtCore/QMutex \
+		pattern/observer/observable.h \
+		../../Qt/5.5/gcc/include/QtCore/QVector \
+		../../Qt/5.5/gcc/include/QtCore/qvector.h \
 		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
 		pattern/observer/observer.h \
 		pattern/observer/observerman.h
@@ -731,6 +777,21 @@ observable.o: pattern/observer/observable.cpp pattern/observer/observable.h \
 		../../Qt/5.5/gcc/include/QtCore/qpoint.h \
 		pattern/observer/observer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o observable.o pattern/observer/observable.cpp
+
+factory.o: pattern/factory/factory.cpp pattern/factory/factory.h \
+		space_objects/ships/iunit.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o factory.o pattern/factory/factory.cpp
+
+factorymanager.o: pattern/factory/factorymanager.cpp pattern/factory/demo_manager.h \
+		pattern/factory/spaceship.h \
+		space_objects/ships/ship_shell.h \
+		space_objects/ships/ishipshell.h \
+		space_objects/ships/iunit.h \
+		space_objects/ships/ship_enging.h \
+		space_objects/ships/ishipenging.h \
+		pattern/factory/data_structures.h \
+		pattern/factory/ispaceship.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o factorymanager.o pattern/factory/factorymanager.cpp
 
 ####### Install
 
