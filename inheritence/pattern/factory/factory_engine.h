@@ -30,21 +30,21 @@ public:
             {
                 ShipEnging *engin = new ShipEnging(100, 10.0f);
                 unit = engin;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
             }
         case ISpaceShip::Engin::SPEED:
             {
                 ShipEnging *engin = new ShipEnging(140, 12.0f);
                 unit = engin;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
             }
         default:
             {
                 ShipEnging *engin = new ShipEnging(100, 10.0f);
                 unit = engin;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
             }
         }
@@ -54,7 +54,7 @@ public:
 
     IUnit *create(ISpaceShip::Shell T) override
     {
-        return NULL;
+        return nullptr;
     }
 };
 

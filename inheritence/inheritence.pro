@@ -1,5 +1,4 @@
-QT += core
-QT -= gui
+QT += widgets
 
 TARGET = inheritence
 CONFIG += console
@@ -13,7 +12,8 @@ SOURCES += main.cpp \
     pattern/observer/observermanager.cpp \
     pattern/observer/observable.cpp \
     pattern/factory/factory.cpp \
-    pattern/factory/factorymanager.cpp
+    pattern/factory/factorymanager.cpp \
+    view/viewspace.cpp
 
 HEADERS += \
     base.h \
@@ -41,4 +41,5 @@ HEADERS += \
     pattern/factory/builder_transport.h \
     space_objects/ships/ishipenging.h \
     space_objects/ships/ishipshell.h \
-    space_objects/ships/iunit.h
+    space_objects/ships/iunit.h \
+    view/viewspace.h

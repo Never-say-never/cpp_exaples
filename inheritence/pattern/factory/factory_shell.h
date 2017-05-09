@@ -31,21 +31,21 @@ public:
             {
                 ShipShell *shell = new ShipShell(600);
                 unit = shell;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
             }
         case ISpaceShip::Shell::LIGHT:
             {
                 ShipShell *shell = new ShipShell(170);
                 unit = shell;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
         }
         default:
             {
                 ShipShell *shell = new ShipShell(170);
                 unit = shell;
-                std::cout << unit->print() << std::endl;
+                std::cout << "factory create :" << unit->print() << std::endl;
                 break;
             }
         }

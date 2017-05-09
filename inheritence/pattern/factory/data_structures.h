@@ -3,23 +3,21 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <QString>
+
 using namespace std;
 
 struct Point
 {
-    Point(int x, int y)
+    Point() : x(10), y(10) {}
+
+    QString toString()
     {
-        this->x = x;
-        this->y = y;
+        return QString::number(x).append(" : ").append(QString::number(y));
     }
 
-    void print()
-    {
-        cout << "x:" << this->x << "; y:" << this->y << endl;
-    }
-
-    int x;
-    int y;
+    size_t x;
+    size_t y;
 };
 
 #endif // DATA_STRUCTURES

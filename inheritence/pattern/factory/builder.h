@@ -11,6 +11,8 @@ public:
     virtual IUnit* configureEngin() = 0;
     virtual IUnit* configureShell() = 0;
     virtual void build(ISpaceShip &ship) = 0;
+
+    virtual ~Builder() {}
 };
 
 #endif // BUILDER

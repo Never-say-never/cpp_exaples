@@ -28,7 +28,7 @@ public:
 public:
     std::string print() override
     {
-        QString str("ShipEnging{");
+        QString str("ShipShell{");
         str.append("hitPoints:" + QString::number(this->hitPoints));
         str.append("}");
 

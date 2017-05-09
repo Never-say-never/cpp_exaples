@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+#include <QApplication>
 #include <vector>
 
 #include <iostream>
@@ -103,13 +103,14 @@ void runProtectedCall()
 
 void space_ship_demo()
 {
+
     FactoryManager f;
     f.runDemo();
 }
 
-int main(int argc, char *argv[])
+int main(int argv, char *args[])
 {
-    QCoreApplication a(argc, argv); 
+    QApplication app(argv, args);
     //listWithAbstractObjects();
     //runFloattest();
     //runProtectedCall();
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
 
     space_ship_demo();
 
-    return a.exec();
+    return app.exec();
 }
 
 

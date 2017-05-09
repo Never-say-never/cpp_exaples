@@ -9,3 +9,10 @@ FactoryManager::FactoryManager()
     this->builderTransport  = new BuilderTransport(fShell, fEngin);
 }
 
+FactoryManager::~FactoryManager()
+{
+    delete this->builderBattleShip;
+    delete this->builderTransport;
+    //delete this->timer;
+}
+

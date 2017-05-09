@@ -14,6 +14,8 @@ public:
 
     virtual void setShell(IUnit *shell) = 0;
     virtual void setEnging(IUnit *engin) = 0;
+
+    virtual ~ISpaceShip() {}
 };
 
 #endif // ISPACESHIP

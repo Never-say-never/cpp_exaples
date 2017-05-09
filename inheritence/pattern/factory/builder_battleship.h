@@ -16,8 +16,8 @@ public:
 public:
 
     BuilderBattleShip(FactoryShell *factoryShell, FactoryEngin *factoryEngin):
-        factoryShell(0),
-        factoryEngin(0)
+        factoryShell(nullptr),
+        factoryEngin(nullptr)
     {
         this->factoryEngin = factoryEngin;
         this->factoryShell = factoryShell;
@@ -52,8 +52,6 @@ public:
 
         // setup spaceship shell
         ship.setShell(this->configureShell());
-
-        //ship->fly();
     }
 };
 
